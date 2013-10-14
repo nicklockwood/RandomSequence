@@ -1,7 +1,7 @@
 //
 //  RandomSequence.m
 //
-//  Version 1.0
+//  Version 1.0.1
 //
 //  Created by Nick Lockwood on 25/02/2012.
 //  Copyright (c) 2012 Charcoal Design
@@ -32,6 +32,14 @@
 
 #import "RandomSequence.h"
 
+
+static NSString *const SeedPropertyKey = @"seed";
+
+static const uint32_t RandomMultiplier = 9301;
+static const uint32_t RandomIncrement = 49297;
+static const uint32_t RandomModulus = 233280;
+
+
 @implementation RandomSequence
 
 + (RandomSequence *)defaultSequence
@@ -44,7 +52,7 @@
     return defaultSequence;
 }
 
-+ (instancetype)sequenceWithSeed:(uint64_t)seed
++ (instancetype)sequenceWithSeed:(uint32_t)seed
 {
     RandomSequence *sequence = [[self alloc] init];
     sequence.seed = seed;
@@ -55,8 +63,7 @@
 {
     if ((self = [super init]))
     {
-        NSTimeInterval interval = [[NSDate date] timeIntervalSince1970];
-        _seed = (uint64_t)(interval * 1000.0) % 233280;
+        _seed = arc4random() % RandomModulus;
     }
     return self;
 }
@@ -65,14 +72,14 @@
 {
     if ((self = [super init]))
     {
-        _seed = [aDecoder decodeInt64ForKey:@"seed"];
+        _seed = [aDecoder decodeInt32ForKey:SeedPropertyKey];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeInt64:_seed forKey:@"seed"];
+    [aCoder encodeInt32:_seed forKey:SeedPropertyKey];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -82,14 +89,19 @@
     return sequence;
 }
 
+- (void)setSeed:(uint32_t)seed
+{
+    _seed = seed % RandomModulus;
+}
+
 - (double)value
 {
-    return _seed / 233280.0;
+    return (double)_seed / (double)RandomModulus;
 }
 
 - (double)nextValue
 {
-    _seed = (_seed * 9301 + 49297) % 233280;
+    _seed = (_seed * RandomMultiplier + RandomIncrement) % RandomModulus;
     return [self value];
 }
 

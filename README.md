@@ -37,9 +37,9 @@ Properties
 
 The RandomSequence class has a single property:
 
-	@property (nonatomic, assign) uint64_t seed;
+	@property (nonatomic, assign) uint32_t seed;
 
-The seed value represents the current state of the sequence. It is used to generate the value returned by the `value` method, and to calculate the next seed. When you create a new RandomSequence instance, the seed is automatically set to an arbitrary value based on the current system time, so the sequence will be unique each time the app is run. To create a repeatable sequence, set the seed to a known value before use. To save and retsore the state of a given sequence to a particualr point, just record the current seed value and restore it later.
+The seed value represents the current state of the sequence. It is used to generate the value returned by the `value` method, and to calculate the next seed. When you create a new RandomSequence instance, the seed is automatically set to an arbitrary value generated using arc4random(), so the sequence will be unique for each instance that is created. To create a repeatable sequence, set the seed to a known value before use. To save and restore the state of a given sequence to a particular point, just record the current seed value and restore it later. The seed value must be between 0 and 233280, but larger values will be automatically wrapped to that range.
 
 
 Methods
@@ -51,7 +51,7 @@ The RandomSequence class has the following methods:
 	
 This method returns the shared default sequence, initialised using the current time at the point when it was first called.
 	
-    + (instancetype)sequenceWithSeed:(uint64_t)seed;
+    + (instancetype)sequenceWithSeed:(uint32_t)seed;
     
 This method returns a new, autoreleased RandomSequence instance with the specified seed value.
 
@@ -104,3 +104,13 @@ Protocols
 ------------------
 
 RandomSequence conforms to the NSCopying and NSCoding protocols. This allows you to make a copy of a sequence at a particular point (e.g. if you want to be able to repeat the same sequence later) and/or save it to disk so that the sequence can resume from the same point at a later date.
+
+
+Algorithm
+------------------
+
+The random number generating algorithm is fairly simple. Each new seed is generated from the previous value using the following function:
+
+    _seed = (_seed * 9301 + 49297) % 233280;
+    
+This provides a reasonably random sequence that can be easily recreated using any programming language that supports 32-bit integer math, which is handy if you want to replicate the sequence logic on the server-side.

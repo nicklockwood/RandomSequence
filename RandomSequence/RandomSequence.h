@@ -1,7 +1,7 @@
 //
 //  RandomSequence.h
 //
-//  Version 1.0
+//  Version 1.0.1
 //
 //  Created by Nick Lockwood on 25/02/2012.
 //  Copyright (c) 2012 Charcoal Design
@@ -34,10 +34,10 @@
 
 @interface RandomSequence : NSObject <NSCoding, NSCopying>
 
-@property (nonatomic, assign) uint64_t seed;
+@property (nonatomic, assign) uint32_t seed;
 
 + (instancetype)defaultSequence;
-+ (instancetype)sequenceWithSeed:(uint64_t)seed;
++ (instancetype)sequenceWithSeed:(uint32_t)seed;
 
 - (double)value;
 - (double)nextValue;
