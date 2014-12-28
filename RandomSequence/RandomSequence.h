@@ -1,7 +1,7 @@
 //
 //  RandomSequence.h
 //
-//  Version 1.0.1
+//  Version 1.2
 //
 //  Created by Nick Lockwood on 25/02/2012.
 //  Copyright (c) 2012 Charcoal Design
@@ -32,17 +32,34 @@
 
 #import <Foundation/Foundation.h>
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wobjc-missing-property-synthesis"
+
+
+static const NSUInteger RandomSequenceAlgorithmVersion = 2;
+
+
 @interface RandomSequence : NSObject <NSCoding, NSCopying>
 
+@property (nonatomic, assign) NSUInteger version;
 @property (nonatomic, assign) uint32_t seed;
 
 + (instancetype)defaultSequence;
 + (instancetype)sequenceWithSeed:(uint32_t)seed;
 
-- (double)value;
-- (double)nextValue;
 - (NSUInteger)nextIntegerInRange:(NSRange)range;
 - (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to;
+- (double)nextDouble;
+- (BOOL)nextBool;
+
+@end
+
+
+@interface RandomSequence (Deprecated)
+
+- (double)value DEPRECATED_MSG_ATTRIBUTE("Use seed or nextDouble instead");
+- (double)nextValue DEPRECATED_MSG_ATTRIBUTE("Use nextDouble instead");
 
 @end
 
@@ -61,3 +78,6 @@
 - (void)shuffleWithSequence:(RandomSequence *)sequence;
 
 @end
+
+
+#pragma GCC diagnostic pop

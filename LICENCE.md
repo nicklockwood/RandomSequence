@@ -1,6 +1,6 @@
 RandomSequence
 
-Version 1.0.1, October 14th, 2013
+Version 1.2, December 28th, 2014
 
 Copyright (C) 2012 Charcoal Design
 
