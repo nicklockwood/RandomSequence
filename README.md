@@ -20,9 +20,11 @@ NOTE: 'Supported' means that the library has been tested with this version. 'Com
 ARC Compatibility
 ------------------
 
-RandomSequence is compatible with both ARC and non-ARC compile targets.
+As of version 1.2, RandomSequence requires ARC. If you wish to use RandomSequence in a non-ARC project, just add the -fobjc-arc compiler flag to the RandomSequence.m file. To do this, go to the Build Phases tab in your target settings, open the Compile Sources group, double-click RandomSequence.m in the list and type -fobjc-arc into the popover.
+ 
+If you wish to convert your whole project to ARC, comment out the #error line in RandomSequence.m, then run the Edit > Refactor > Convert to Objective-C ARC... tool in Xcode and make sure all files that you wish to use ARC for (including RandomSequence.m) are checked.
 
-
+ 
 Thread Safety
 --------------
 
@@ -128,11 +130,11 @@ Release Notes
 
 Version 1.2
 
-- Updated algorithm to generate numbers in the full 32-bit range. IF UPGRADING, YOU MUST SET THE VERSION EXPLICITLY TO MAINTAIN COMPATIBILITY WITH OLDER SHUFFLE SEQUENCES
+- Updated algorithm to generate numbers in the full 32-bit range. IF UPGRADING, YOU MUST SET THE VERSION TO 0 TO MAINTAIN COMPATIBILITY WITH OLDER SHUFFLE SEQUENCES
 - Deprecated `value` and `nextValue` methods
 - Now requires ARC
 
-Version 1.1
+Version 1.1 (unreleased)
 
 - Updated array shuffle to use more even distribution. IF UPGRADING, YOU MUST SET VERSION TO 0 TO MAINTAIN COMPATIBILITY WITH OLDER SHUFFLE SEQUENCES
 - Added algorithm version number
