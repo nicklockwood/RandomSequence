@@ -57,10 +57,10 @@
 {
     RandomSequence *sequence = [RandomSequence sequenceWithSeed:123456];
     
-    NSArray *values = @[@([sequence nextIntegerFrom:0 to:UINT32_MAX]),
-                        @([sequence nextIntegerFrom:0 to:UINT32_MAX]),
-                        @([sequence nextIntegerFrom:0 to:UINT32_MAX]),
-                        @([sequence nextIntegerFrom:0 to:UINT32_MAX])];
+    NSArray *values = @[@([sequence nextIntegerInRange:NSMakeRange(0, UINT32_MAX)]),
+                        @([sequence nextIntegerInRange:NSMakeRange(0, UINT32_MAX)]),
+                        @([sequence nextIntegerInRange:NSMakeRange(0, UINT32_MAX)]),
+                        @([sequence nextIntegerInRange:NSMakeRange(0, UINT32_MAX)])];
     
     NSArray *compare = @[@(351072415),
                          @(870155634),

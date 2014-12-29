@@ -139,7 +139,12 @@ static const RandomSequenceParams params[] = {PARAMS_V1, PARAMS_V1, PARAMS_V2};
     {
         return (NSUInteger)(floor([self nextDouble] * (double)range.length)) + range.location;
     }
-    return (NSUInteger)([self nextSeed] % range.length) + range.location;
+    
+    NSAssert(range.length <= params[self.version].modulus,
+             @"RandomSequence cannot generate a number > %llu",
+             (unsigned long long)params[self.version].modulus);
+    
+    return ((NSUInteger)[self nextSeed] % range.length) + range.location;
 }
 
 - (NSInteger)nextIntegerFrom:(NSInteger)from to:(NSInteger)to
@@ -148,7 +153,12 @@ static const RandomSequenceParams params[] = {PARAMS_V1, PARAMS_V1, PARAMS_V2};
     {
         return (NSInteger)(floor([self nextDouble] * (double)(to - from))) + from;
     }
-    return (NSInteger)([self nextSeed] % ABS(to - from)) + MIN(to, from);
+    
+    NSAssert(to - from <= params[self.version].modulus,
+             @"RandomSequence cannot generate a number > %llu",
+             (unsigned long long)params[self.version].modulus);
+    
+    return (NSInteger)([self nextSeed] % (uint32_t)ABS(to - from)) + MIN(to, from);
 }
 
 - (double)nextDouble
